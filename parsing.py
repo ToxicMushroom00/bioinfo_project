@@ -34,6 +34,21 @@ def findAmino(codon):
                 print(key)
 
 # file = "NC_005363_HEG_NT.fasta"
-# with open(file) as curr:
-#     for line in curr.readlines():
-#         print(line)
+file = "test.fasta"
+with open(file) as curr:
+    for line in curr.readlines():
+        # look for carrot ">" line
+        if line[0] == '>':
+            # if found ">" line, skip
+            continue
+        else:  # now we're working with the gene line!
+            # look for start codon
+            if line[:3] == "lol":
+                print("found start codon!")
+                print(line[:3])
+            # filter start codon out
+            filtered_line = line[3:]
+
+
+
+
