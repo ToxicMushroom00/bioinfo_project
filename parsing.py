@@ -1,12 +1,13 @@
 import sys
 
-codons: {
-    "start": ["TAG"],
+# ! make sure to make all codons uppercase when comparing!
+codons = {
+    "start": ["ATG"],
     "stop": ["TAA", "TAG", "TGA"],
     "Phe": ["TTT", "TTC"],
     "Leu": ["TTA", "TTG", "CTT", "CTC", "CTA", "CTG"],
     "lle": ["ATT", "ATC", "ATA"],
-    "Met": ["ATG"]
+    "Met": ["ATG"],
     "Val": ["GTT", "GTC", "GTA", "GTG"],
     "Ser": ["TCT", "TCC", "TCA", "TCG", "AGT", "AGC"],
     "Pro": ["CCT", "CCC", "CCA", "CCG"],
@@ -25,11 +26,14 @@ codons: {
     "Gly": ["GGT", "GGC", "GGA", "GGG"]
 }
 
+# Find the Amino Acid that the given codon codes for
 def findAmino(codon):
     for key in codons:
-        for value in key:
+        for value in codons.get(key):
             if value == codon:
-                return key
+                print(key)
 
-file = ""
-with open(file) as curr:
+# file = "NC_005363_HEG_NT.fasta"
+# with open(file) as curr:
+#     for line in curr.readlines():
+#         print(line)
