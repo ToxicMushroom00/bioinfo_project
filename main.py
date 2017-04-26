@@ -34,6 +34,7 @@ def find_amino(codon):
         for value in CODON_DICT.get(key):
             if value == codon:
                 return key
+    return (-1)
 
 
 # I use this method below to help group the INPUT DNA into 3s (perfect codon format)
@@ -50,8 +51,9 @@ def parse_fasta(file):
     return_me = []
     with open(file) as INPUT:
         for line in INPUT.readlines():
+            line = line.strip()
             if line[0] == '>':  # we found carrot ">" line!
-                return_me.append(line.replace("\n", ""))  # for some reason /n get included, lets take that out
+                #return_me.append(line.replace("\n", ""))  # for some reason /n get included, lets take that out
                 continue  # nothing else to do with current INPUT line, so let go to the next INPUT line
             else:  # we found the line with the DNAs!
                 line = line.upper()  # our reference DNA in the dict above is all uppercase, so lets make it the same
@@ -74,11 +76,20 @@ def count_codons(codons):
             return_me[result] = {codon: 1}
     return return_me
 
+
 #        if result in return_me:
 #            return_me[result] += 1
 #        else:
 #            return_me[result] = 1  # this adds both the key and value into return_me dict
 #    return return_me
+
+def print_amino_dict(inputFile):
+    aminoDict = count_codons(parse_fasta(inputFile))
+    for amino in aminoDict:
+        print ('\nAmino: ' + (str)(amino))
+        for codon in aminoDict[amino]:
+            print ('codon: ' + (str)(codon) + ' = ' + (str)(aminoDict[amino][codon]))
+
 
 
 def codon_per_amino(inputFile, codon):
@@ -91,17 +102,48 @@ def codon_per_amino(inputFile, codon):
     return ((codonCount/codonCountInAmino)*100)
 
 
-def print_amino_dict(inputFile):
+def ask_for_codon():
+    codon = input("Please enter a codon: ")
+    codon = codon.upper()
+    #print((str)(codon_per_amino(inputFile, codon)) + '%')
+    return codon
+
+
+
+def  codons_per_amino(inputFile, codons):
     aminoDict = count_codons(parse_fasta(inputFile))
-    for amino in aminoDict:
-        print ('Amino: ' + (str)(amino))
-        for codon in aminoDict[amino]:
-            print ((str)(codon) + ':' + (str)(aminoDict[amino][codon]))
+    totalCountInAmino = 0
+    codonsCount = 0
+    print(codons[0])
+    amino = find_amino(codons[0])
+    print(amino)
+    for codon in codons:
+        print(codon)
+        #amino = find_amino(codon)
+        codonsCount += aminoDict[amino][codon]
+    for aminoCodon in aminoDict[amino]:
+        print(aminoDict[amino][aminoCodon])
+        #amino = find_amino(codons[0])
+        totalCountInAmino += aminoDict[amino][aminoCodon]
+    return ((codonsCount/totalCountInAmino)*100)
+
+
+#def compare_two_files(file1, file2):
+def ask_for_codons():
+    codons = []
+    length = (int)(input("How many codons do you want to look at: "))
+    for c in range(0,length):
+        codons.append((input("Please enter a codon: ")).upper())
+    return codons
+
+
 
 
 file = "NC_005363_HEG_NT.fasta"
-codon = 'GCG'
-print((str)(codon_per_amino(file, codon)) + '%')
-#print_amino_dict(file)
+#print(ask_for_codons())
+#print((str)(codon_per_amino(file, ask_for_codon())) + '%')
+#print((str)(codons_per_amino(file, ask_for_codons())) + '%')
+#ask_for_codon(file)
+print_amino_dict(file)
 #print(count_codons(parse_fasta(file)))
 
