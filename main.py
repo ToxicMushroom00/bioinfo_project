@@ -1,6 +1,7 @@
 import itertools
 
 # ! make sure to make all codons uppercase when comparing!
+# if you use parse_fasta(), it will return an array with all capitalized (read more below)
 CODON_DICT = {
     # "start": [""], # no start codon in the fasta file!
     "stop": ["TAA", "TAG", "TGA"],
@@ -59,6 +60,7 @@ def parse_fasta(file):
     return return_me
 
 
+# IMPORTANT!: this counts codons for the WHOLE fasta file
 def count_codons(codons):
     return_me = {}
     for codon in codons:
