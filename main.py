@@ -66,11 +66,42 @@ def count_codons(codons):
     for codon in codons:
         result = find_amino(codon)
         if result in return_me:
-            return_me[result] += 1
+            if codon in return_me[result]:
+                return_me[result][codon] += 1
+            else:
+                return_me[result][codon] = 1
         else:
-            return_me[result] = 1  # this adds both the key and value into return_me dict
+            return_me[result] = {codon: 1}
     return return_me
+
+#        if result in return_me:
+#            return_me[result] += 1
+#        else:
+#            return_me[result] = 1  # this adds both the key and value into return_me dict
+#    return return_me
+
+
+def codon_per_amino(inputFile, codon):
+    aminoDict = count_codons(parse_fasta(inputFile))
+    amino = find_amino(codon)
+    codonCount = aminoDict[amino][codon]
+    codonCountInAmino = 0
+    for aminoCodon in aminoDict[amino]:
+        codonCountInAmino += aminoDict[amino][aminoCodon]
+    return ((codonCount/codonCountInAmino)*100)
+
+
+def print_amino_dict(inputFile):
+    aminoDict = count_codons(parse_fasta(inputFile))
+    for amino in aminoDict:
+        print ('Amino: ' + (str)(amino))
+        for codon in aminoDict[amino]:
+            print ((str)(codon) + ':' + (str)(aminoDict[amino][codon]))
 
 
 file = "NC_005363_HEG_NT.fasta"
-print(count_codons(parse_fasta(file)))
+codon = 'GCG'
+print((str)(codon_per_amino(file, codon)) + '%')
+#print_amino_dict(file)
+#print(count_codons(parse_fasta(file)))
+
